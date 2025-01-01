@@ -2,7 +2,7 @@
 
 This repository contains a Renewable Energy Recommendation and Optimization Expert System developed using Python, Experta, and Streamlit. The system provides tailored recommendations for renewable energy solutions based on user-provided inputs such as terrain type, climate, energy consumption, budget, land size, maintenance preference, and seasonal variations.
 
-Features
+**Features**
 
 Expert System Rules: Uses Experta to define rules for recommending renewable energy solutions.
 
@@ -12,23 +12,23 @@ Hybrid Solutions: Suggests alternatives for situations with variable or uncertai
 
 User-Friendly Interface: A Streamlit-based web application for seamless interaction.
 
-Files
+**Files**
 
-knowledge_base.py
+1. knowledge_base.py
 
-Contains the RenewableEnergyKnowledgeBase class with rules for renewable energy recommendations.
+   Contains the RenewableEnergyKnowledgeBase class with rules for renewable energy recommendations.
 
-inference_engine.py
+2. inference_engine.py
 
-Contains the run_inference_engine function that initializes the knowledge base, declares facts, and executes the inference engine.
+   Contains the run_inference_engine function that initializes the knowledge base, declares facts, and executes the inference engine.
 
-app.py
+3. app.py
 
-The main Streamlit application for interacting with the system.
+  The main Streamlit application for interacting with the system.
 
 Setup and Installation
 
-Prerequisites
+**Prerequisites**
 
 Python 3.8 or later
 
@@ -58,23 +58,23 @@ streamlit run app.py
 
 Open the provided URL in your web browser to access the application.
 
-Input Parameters
+**Input Parameters**
 
-Terrain Type: Options include flat, hilly, coastal, or unknown.
+  Terrain Type: Options include flat, hilly, coastal, or unknown.
+  
+  Climate: Options include sunny, windy, moderate, or unknown.
+  
+  Energy Consumption: Monthly average energy consumption in kWh.
+  
+  Budget: Estimated installation budget in USD.
+  
+  Land Size: Available land size for installation in square meters.
+  
+  Maintenance Preference: Preferred level of maintenance (Low, Medium, High).
+  
+  Seasonal Variations: Whether the location experiences significant seasonal changes (Yes or No).
 
-Climate: Options include sunny, windy, moderate, or unknown.
-
-Energy Consumption: Monthly average energy consumption in kWh.
-
-Budget: Estimated installation budget in USD.
-
-Land Size: Available land size for installation in square meters.
-
-Maintenance Preference: Preferred level of maintenance (Low, Medium, High).
-
-Seasonal Variations: Whether the location experiences significant seasonal changes (Yes or No).
-
-Recommendations
+**Recommendations**
 
 The system provides:
 
@@ -100,7 +100,7 @@ Maintenance Preference: Low
 
 Seasonal Variations: No
 
-Output:
+**Output:**
 
 Recommendation: "Solar energy is ideal for your location."
 
@@ -120,14 +120,6 @@ Push to the branch (git push origin feature-branch).
 
 Open a pull request.
 
-License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-Contact
+**Contact**
 
 Email: nunuwanisamarakoon.online@gmail.com
-
-LinkedIn: Nuwani Samarakoon
-
-GitHub: nuwanisamarakoon
