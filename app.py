@@ -4,30 +4,38 @@ from inference_engine import run_inference_engine
 def main():
     st.title("Renewable Energy Recommendation and Optimization Expert System")
 
-    st.write("This system provides tailored recommendations for implementing renewable energy solutions based on your location's geographical and climate conditions.")
+    st.write("This expert system provides tailored recommendations for renewable energy solutions based on your inputs.")
 
-    # Collecting user inputs
-    terrain = st.selectbox("Select your terrain type", ["flat", "hilly", "coastal"])
-    climate = st.selectbox("Select your climate", ["sunny", "windy", "moderate"])
-    
-    # Additional questions
-    energy_consumption = st.number_input("How much energy do you consume on average per month (in kWh)?", min_value=0)
-    budget = st.number_input("What is your estimated budget for installing renewable energy solutions?", min_value=0)
-    land_size = st.number_input("How much land do you have available for installing energy systems (in square meters)?", min_value=0)
-    maintenance_preference = st.selectbox("How much maintenance are you willing to perform?", ["Low", "Medium", "High"])
+    # Collect user inputs
+    terrain = st.selectbox("Select your terrain type", ["flat", "hilly", "coastal", "unknown"])
+    climate = st.selectbox("Select your climate", ["sunny", "windy", "moderate", "unknown"])
+    energy_consumption = st.number_input("Average energy consumption per month (kWh):", min_value=0, step=10)
+    budget = st.number_input("Estimated budget for installation ($):", min_value=0, step=100)
+    land_size = st.number_input("Available land size for installation (sqm):", min_value=0, step=10)
+    maintenance_preference = st.selectbox("Preferred maintenance level:", ["Low", "Medium", "High"])
     seasonal_variations = st.selectbox("Does your location experience significant seasonal changes?", ["Yes", "No"])
 
+    # Get recommendations
     if st.button("Get Recommendation"):
-        # Call the inference engine to process the input and get the recommendation
-        recommendation = run_inference_engine(
-            terrain, climate, energy_consumption, budget, land_size, maintenance_preference, seasonal_variations
+        recommendations = run_inference_engine(
+            terrain=terrain,
+            climate=climate,
+            energy_consumption=energy_consumption,
+            budget=budget,
+            land_size=land_size,
+            maintenance_preference=maintenance_preference,
+            seasonal_variations=seasonal_variations
         )
-        
-        # Display the recommendation in the frontend
-        if recommendation:
-            st.success(recommendation)
+
+        # Display results
+        if recommendations:
+            st.subheader("Recommendations")
+            for recommendation, alternatives in recommendations:
+                st.success(recommendation)
+                st.info(f"Alternatives: {', '.join(alternatives)}")
         else:
-            st.error("No recommendation available for the given input.")
+            st.error("No suitable recommendation found for the given inputs.")
 
 if __name__ == "__main__":
     main()
+

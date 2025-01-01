@@ -1,45 +1,72 @@
+
+
 from experta import *
 
 class RenewableEnergyKnowledgeBase(KnowledgeEngine):
     @DefFacts()
     def _initial_fact(self):
-        # You can define some initial facts here if needed
         yield Fact(action="find_renewable_energy_solution")
 
-    @Rule(Fact(action='find_renewable_energy_solution'), NOT(Fact(terrain=W())), NOT(Fact(climate=W())))
-    def ask_for_terrain_and_climate(self):
-        self.declare(Fact(terrain=input("Enter your terrain type (flat, hilly, coastal): ")))
-        self.declare(Fact(climate=input("Enter your climate (sunny, windy, moderate): ")))
-
-    @Rule(Fact(action='find_renewable_energy_solution'), NOT(Fact(energy_consumption=W())), NOT(Fact(budget=W())))
-    def ask_for_energy_and_budget(self):
-        self.declare(Fact(energy_consumption=input("How much energy do you consume on average per month (in kWh)? ")))
-        self.declare(Fact(budget=input("What is your estimated budget for installing renewable energy solutions? ")))
-
-    @Rule(Fact(action='find_renewable_energy_solution'), NOT(Fact(land_size=W())), NOT(Fact(maintenance_preference=W())))
-    def ask_for_land_and_maintenance(self):
-        self.declare(Fact(land_size=input("How much land do you have available for installing energy systems (in square meters)? ")))
-        self.declare(Fact(maintenance_preference=input("How much maintenance are you willing to perform? (Low, Medium, High)")))
-
-    @Rule(Fact(action='find_renewable_energy_solution'), NOT(Fact(seasonal_variations=W())))
-    def ask_for_seasonal_variations(self):
-        self.declare(Fact(seasonal_variations=input("Does your location experience significant seasonal changes? (Yes/No): ")))
-
-    @Rule(Fact(action='find_renewable_energy_solution'), Fact(terrain='flat'), Fact(climate='sunny'))
+    # Rule for Solar Energy Solution
+    @Rule(Fact(terrain='flat'), Fact(climate='sunny'))
     def solar_energy_solution(self):
-        print("Recommendation: Solar energy is ideal for your location.")
+        self.declare(Fact(
+            recommendation="Solar energy is ideal for your location.",
+            alternatives=["Hybrid Solar-Wind", "Small Wind Turbines"]
+        ))
+        self.halt()  # Stop processing further rules
 
-    @Rule(Fact(action='find_renewable_energy_solution'), Fact(terrain='hilly'), Fact(climate='windy'))
+    # Rule for Wind Energy Solution
+    @Rule(Fact(terrain='hilly'), Fact(climate='windy'))
     def wind_energy_solution(self):
-        print("Recommendation: Wind energy is ideal for your location.")
+        self.declare(Fact(
+            recommendation="Wind energy is ideal for your location.",
+            alternatives=["Micro-Hydro Power", "Hybrid Wind-Solar"]
+        ))
+        self.halt()  # Stop processing further rules
 
-    @Rule(Fact(action='find_renewable_energy_solution'), Fact(terrain='coastal'), Fact(climate='moderate'))
+    # Rule for Tidal Energy Solution
+    @Rule(Fact(terrain='coastal'), Fact(climate='moderate'))
     def tidal_energy_solution(self):
-        print("Recommendation: Tidal energy is ideal for your location.")
+        self.declare(Fact(
+            recommendation="Tidal energy is ideal for your location.",
+            alternatives=["Offshore Wind Turbines", "Hybrid Tidal-Solar"]
+        ))
+        self.halt()  # Stop processing further rules
 
-    # Additional rules can be added based on energy consumption, budget, land size, etc.
-    # Example rule:
-    @Rule(Fact(action='find_renewable_energy_solution'), Fact(energy_consumption=W()), Fact(budget=W()))
-    def energy_and_budget_solution(self):
-        # Add logic based on energy consumption and budget
-        pass
+    # Rule for Large-Scale Solution (Energy consumption > 1000 kWh and Budget > 5000)
+    @Rule(Fact(action='find_renewable_energy_solution'), Fact(energy_consumption=P(lambda x: x > 1000)), Fact(budget=P(lambda x: x > 5000)))
+    def large_scale_solution(self):
+        self.declare(Fact(
+            recommendation="Large-scale solar farms are recommended for high energy demands and sufficient budget.",
+            alternatives=["Wind Farms", "Hydroelectric Power"]
+        ))
+        self.halt()  # Stop processing further rules
+
+    # Rule for Small-Scale Solution (Land size < 20 sqm and Low maintenance)
+    @Rule(Fact(action='find_renewable_energy_solution'), Fact(land_size=P(lambda x: x < 20)), Fact(maintenance_preference='Low'))
+    def small_scale_solution(self):
+        self.declare(Fact(
+            recommendation="Compact solar panels or small wind turbines are ideal for limited land and low maintenance.",
+            alternatives=["Hybrid Solar-Wind", "Community Solar Programs"]
+        ))
+        self.halt()  # Stop processing further rules
+
+    # Rule for Seasonal Variations
+    @Rule(Fact(action='find_renewable_energy_solution'), Fact(seasonal_variations='Yes'))
+    def seasonal_solution(self):
+        self.declare(Fact(
+            recommendation="Hybrid renewable systems are recommended for locations with significant seasonal changes.",
+            alternatives=["Battery Storage Systems", "Geothermal Energy"]
+        ))
+        self.halt()  # Stop processing further rules
+
+    # Rule for Unknown Inputs (Unknown terrain or climate)
+    @Rule(Fact(action='find_renewable_energy_solution'), 
+          OR(Fact(terrain="unknown"), Fact(climate="unknown")), salience=10)
+    def unknown_solution(self):
+        self.declare(Fact(
+            recommendation="Insufficient data to provide a precise recommendation.",
+            alternatives=["No alternative, please provide details"]
+        ))
+        self.halt()  # Stop processing further rules
